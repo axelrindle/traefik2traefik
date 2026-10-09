@@ -2,6 +2,10 @@
 server:
   address: ":1336"
 
+logging:
+  # debug, info, warn, error
+  level: warn
+
 # downstream Traefik config
 traefik:
   # downstream Traefik api endpoint
