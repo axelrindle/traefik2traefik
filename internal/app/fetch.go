@@ -20,7 +20,7 @@ func strToBase64(str string) string {
 
 func (a *App) fetchTraefikRouters() ([]internal.RouterRepresentation, error) {
 	url := fmt.Sprintf("%s/api/http/routers?status=enabled", a.Config.Traefik.Endpoint)
-
+	a.Logger.Debug("fetching Traefik routers", zap.String("endpoint", url))
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		a.ready = false

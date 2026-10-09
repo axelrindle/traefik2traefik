@@ -15,6 +15,7 @@ import (
 
 	"github.com/axelrindle/traefik2traefik/internal/app"
 	"github.com/axelrindle/traefik2traefik/internal/config"
+	"github.com/axelrindle/traefik2traefik/internal/resolver"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -93,8 +94,9 @@ func main() {
 	logger.Info("starting program", zap.String("mode", cfg.Environment))
 
 	app := &app.App{
-		Config: cfg,
-		Logger: logger.With(zap.String("component", "app")),
+		Config:   cfg,
+		Logger:   logger.With(zap.String("component", "app")),
+		Resolver: resolver.NewResolver(),
 	}
 	app.Init()
 

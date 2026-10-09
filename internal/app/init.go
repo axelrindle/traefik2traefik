@@ -11,9 +11,7 @@ import (
 )
 
 func (a *App) Init() {
-	a.http = &http.Client{
-		Timeout: time.Duration(a.Config.Traefik.Timeout) * time.Second,
-	}
+	a.http = a.newHTTPClient()
 
 	a.initScheduler()
 	a.initHttpServer()
