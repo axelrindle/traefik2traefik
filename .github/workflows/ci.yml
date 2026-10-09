@@ -112,8 +112,8 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository }}
           labels: |
-            org.opencontainers.image.title="traefik-configuration-provider"
-            org.opencontainers.image.description="Dynamically expose Traefik routers to upstream Traefik instances"
+            org.opencontainers.image.title="traefik2traefik"
+            org.opencontainers.image.description="Discover configuration from other Traefik instances"
 
       - name: Build and push
         uses: docker/build-push-action@v7
