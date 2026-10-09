@@ -6,17 +6,19 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
 	"strings"
 
-	"github.com/axelrindle/traefik-configuration-provider/internal/util"
+	"github.com/axelrindle/traefik2traefik/internal"
 	dynamic "github.com/traefik/traefik/v3/pkg/config/dynamic"
+	"go.uber.org/zap"
 )
 
 func strToBase64(str string) string {
 	return base64.StdEncoding.EncodeToString([]byte(str))
 }
 
-func (a *App) fetchTraefikRouters() ([]routerRepresentation, error) {
+func (a *App) fetchTraefikRouters() ([]internal.RouterRepresentation, error) {
 	url := fmt.Sprintf("%s/api/http/routers?status=enabled", a.Config.Traefik.Endpoint)
 
 	req, err := http.NewRequest("GET", url, nil)
@@ -42,13 +44,44 @@ func (a *App) fetchTraefikRouters() ([]routerRepresentation, error) {
 		return nil, err
 	}
 
-	data := []routerRepresentation{}
+	data := []internal.RouterRepresentation{}
 	json.Unmarshal(body, &data)
 
 	return data, nil
 }
 
-func (a *App) buildTraefikConfiguration(src []routerRepresentation) dynamic.Configuration {
+// matchesRuleFilter reports whether rule passes the configured rule filters.
+// Without filters every rule passes, otherwise at least one filter must match.
+func (a *App) matchesRuleFilter(router internal.RouterRepresentation) bool {
+	filters := a.Config.Traefik.RuleFilter
+	if len(filters) == 0 {
+		return true
+	}
+
+	for _, f := range filters {
+		switch f.Type {
+		case "rule:contains":
+			if strings.Contains(router.Rule, f.Filter) {
+				return true
+			}
+		case "rule:regex":
+			re, err := regexp.Compile(f.Filter)
+			if err != nil {
+				a.Logger.Error("invalid regex in ruleFilter", zap.String("filter", f.Filter), zap.Error(err))
+				continue
+			}
+			if re.MatchString(router.Rule) {
+				return true
+			}
+		default:
+			a.Logger.Warn("invalid filter type", zap.String("type", f.Type))
+		}
+	}
+
+	return false
+}
+
+func (a *App) buildTraefikConfiguration(src []internal.RouterRepresentation) dynamic.Configuration {
 	routers := map[string]*dynamic.Router{}
 	services := map[string]*dynamic.Service{}
 
@@ -61,13 +94,11 @@ func (a *App) buildTraefikConfiguration(src []routerRepresentation) dynamic.Conf
 		if router.Status != "enabled" {
 			continue
 		}
-		if len(a.Config.Traefik.RuleFilter) > 0 {
-			if !util.ContainsAny(router.Rule, a.Config.Traefik.RuleFilter) {
-				continue
-			}
+		if !a.matchesRuleFilter(router) {
+			continue
 		}
 
-		name := strings.Split(router.Name, "@")[0]
+		name, _, _ := strings.Cut(router.Name, "@")
 		routers[name] = &dynamic.Router{
 			Rule:        router.Rule,
 			Service:     name,

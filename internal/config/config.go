@@ -10,11 +10,16 @@ type ServerConfig struct {
 	Address string `key:"address" default:":1337"`
 }
 
+type FilterConfig struct {
+	Type   string `key:"type" validate:"required"`
+	Filter string `key:"filter" validate:"required"`
+}
+
 type TraefikConfig struct {
-	Endpoint   string   `key:"endpoint" validate:"required,http_url"`
-	BasicAuth  string   `key:"basicAuth"`
-	RuleFilter []string `key:"ruleFilter"`
-	Timeout    int64    `key:"timeout" default:"5"`
+	Endpoint   string         `key:"endpoint" validate:"required,http_url"`
+	BasicAuth  string         `key:"basicAuth"`
+	RuleFilter []FilterConfig `key:"ruleFilter" validate:"dive"`
+	Timeout    int64          `key:"timeout" default:"5"`
 }
 
 type GeneratorConfig struct {

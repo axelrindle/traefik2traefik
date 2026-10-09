@@ -9,11 +9,12 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+	"time"
 
 	_ "embed"
 
-	"github.com/axelrindle/traefik-configuration-provider/internal/app"
-	"github.com/axelrindle/traefik-configuration-provider/internal/config"
+	"github.com/axelrindle/traefik2traefik/internal/app"
+	"github.com/axelrindle/traefik2traefik/internal/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -24,7 +25,7 @@ var banner string
 var (
 	Version        = "dev"
 	CommitHash     = "unknown"
-	BuildTimestamp = "unknown"
+	BuildTimestamp = time.Now().Format("2006-01-02T15:04:05")
 )
 
 var (
@@ -59,7 +60,6 @@ func main() {
 	flag.BoolVar(&healthcheck, "healthcheck", false, "run a healthcheck")
 	flag.Parse()
 	if showVersion {
-		println(BuildVersion())
 		return
 	}
 
@@ -69,6 +69,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer logger.Sync()
 
 	if healthcheck {
 		addressParts := strings.Split(cfg.Server.Address, ":")
@@ -90,8 +91,6 @@ func main() {
 	}
 
 	logger.Info("starting program", zap.String("mode", cfg.Environment))
-
-	defer logger.Sync()
 
 	app := &app.App{
 		Config: cfg,

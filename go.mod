@@ -1,4 +1,4 @@
-module github.com/axelrindle/traefik-configuration-provider
+module github.com/axelrindle/traefik2traefik
 
 go 1.25.0
 

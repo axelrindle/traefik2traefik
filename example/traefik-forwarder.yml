@@ -12,7 +12,10 @@ traefik:
 
   # only include rules which contain the given strings
   ruleFilter:
-    - example.dev
+    - type: rule:contains
+      filter: example.org
+    - type: rule:regex
+      filter: ^Host\(\x60[a-z-]+\.example\.org\x60\) # Host(`foo.example.org`) ...
 
 generator:
   # load-balance to the k3s manager nodes

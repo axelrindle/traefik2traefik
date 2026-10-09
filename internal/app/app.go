@@ -5,7 +5,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/axelrindle/traefik-configuration-provider/internal/config"
+	"github.com/axelrindle/traefik2traefik/internal/config"
 	"github.com/go-co-op/gocron/v2"
 	dynamic "github.com/traefik/traefik/v3/pkg/config/dynamic"
 )
