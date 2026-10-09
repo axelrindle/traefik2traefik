@@ -3,7 +3,7 @@ module github.com/axelrindle/traefik2traefik
 go 1.27.0
 
 require (
-	github.com/go-co-op/gocron/v2 v2.21.1
+	github.com/go-co-op/gocron/v2 v2.22.0
 	github.com/go-playground/validator/v10 v10.30.2
 	github.com/goccy/go-yaml v1.19.2
 	github.com/gookit/config/v2 v2.2.7
