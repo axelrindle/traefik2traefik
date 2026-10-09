@@ -1,6 +1,6 @@
 module github.com/axelrindle/traefik2traefik
 
-go 1.25.0
+go 1.27.0
 
 require (
 	github.com/go-co-op/gocron/v2 v2.21.1

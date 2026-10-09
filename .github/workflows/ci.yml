@@ -13,7 +13,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  GO_VERSION: '>=1.24.0'
+  GO_VERSION: '>=1.27.0'
   TASK_VERSION: 3.x
 
 jobs:
