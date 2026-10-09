@@ -14,6 +14,9 @@ traefik:
   # I placed basic authentication in my setup
   basicAuth: traefik:traefik
 
+  # skip validation of the endpoint's TLS certificate (self-signed certs)
+  insecureSkipVerify: false
+
   # only include rules which contain the given strings
   ruleFilter:
     - type: rule:contains

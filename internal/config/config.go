@@ -16,10 +16,11 @@ type FilterConfig struct {
 }
 
 type TraefikConfig struct {
-	Endpoint   string         `key:"endpoint" validate:"required,http_url"`
-	BasicAuth  string         `key:"basicAuth"`
-	RuleFilter []FilterConfig `key:"ruleFilter" validate:"dive"`
-	Timeout    int64          `key:"timeout" default:"5"`
+	Endpoint           string         `key:"endpoint" validate:"required,http_url"`
+	BasicAuth          string         `key:"basicAuth"`
+	RuleFilter         []FilterConfig `key:"ruleFilter" validate:"dive"`
+	Timeout            int64          `key:"timeout" default:"5"`
+	InsecureSkipVerify bool           `key:"insecureSkipVerify" default:"false"`
 }
 
 type GeneratorConfig struct {

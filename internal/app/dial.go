@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"crypto/tls"
 	"net"
 	"net/http"
 	"time"
@@ -16,6 +17,9 @@ func (a *App) newHTTPClient() *http.Client {
 	transport := http.DefaultTransport.(*http.Transport).Clone()
 	transport.DialContext = a.dialContext
 	transport.DisableKeepAlives = true
+	if a.Config.Traefik.InsecureSkipVerify {
+		transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	}
 
 	return &http.Client{
 		Timeout:   time.Duration(a.Config.Traefik.Timeout) * time.Second,
