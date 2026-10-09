@@ -33,13 +33,13 @@ func TestBuildTraefikConfigurationRuleFilter(t *testing.T) {
 		want    []string
 	}{
 		{"no filter", nil, []string{"a", "b", "c"}},
-		{"simple", []config.FilterConfig{{Type: "simple", Filter: "example.dev"}}, []string{"a"}},
-		{"regex", []config.FilterConfig{{Type: "regex", Filter: "^Host\\(`foo`\\)$"}}, []string{"c"}},
+		{"simple", []config.FilterConfig{{Type: "rule:contains", Filter: "example.dev"}}, []string{"a"}},
+		{"regex", []config.FilterConfig{{Type: "rule:regex", Filter: "^Host\\(`foo`\\)$"}}, []string{"c"}},
 		{"any matches", []config.FilterConfig{
-			{Type: "simple", Filter: "example.dev"},
-			{Type: "regex", Filter: "foo"},
+			{Type: "rule:contains", Filter: "example.dev"},
+			{Type: "rule:regex", Filter: "foo"},
 		}, []string{"a", "c"}},
-		{"invalid regex", []config.FilterConfig{{Type: "regex", Filter: "("}}, []string{}},
+		{"invalid regex", []config.FilterConfig{{Type: "rule:regex", Filter: "("}}, []string{}},
 	}
 
 	for _, tt := range tests {
