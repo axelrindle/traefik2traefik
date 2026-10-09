@@ -13,6 +13,7 @@ vars:
     sh: git rev-parse --short HEAD || echo "abcdef1234567890"
   APP_BUILD_TIMESTAMP:
     sh: date '+%Y-%m-%dT%H:%M:%S'
+  IMAGE_NAME: traefik2traefik
 
 tasks:
   default:
@@ -24,6 +25,9 @@ tasks:
     silent: true
 
   build:
+    env:
+      CGO_ENABLED: "0" # required for full static linking
+      GOOS: linux
     vars:
       ABS: "{{.OUTPUT_DIRECTORY}}/{{.OUTPUT_FILE_NAME}}{{.OUTPUT_FILE_SUFFIX}}"
       LDFLAGS: "-X 'main.Version={{.APP_VERSION}}' -X 'main.CommitHash={{.APP_COMMIT_HASH}}' -X 'main.BuildTimestamp={{.APP_BUILD_TIMESTAMP}}'"
@@ -43,3 +47,9 @@ tasks:
 
   start:
     cmd: go run "{{.INPUT_FILE}}"
+
+  docker:
+    deps:
+      - task: build
+    cmds:
+      - cmd: docker build . -t "{{.IMAGE_NAME}}"
