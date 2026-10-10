@@ -11,6 +11,10 @@ on:
       - main
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   REGISTRY: ghcr.io
   GO_VERSION: '1.27.0'
@@ -113,6 +117,9 @@ jobs:
           labels: |
             org.opencontainers.image.title="traefik2traefik"
             org.opencontainers.image.description="Discover configuration from other Traefik instances"
+          tags: |
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=semver,pattern={{version}}
 
       - name: Build and push
         uses: docker/build-push-action@v7
