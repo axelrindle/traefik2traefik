@@ -110,6 +110,7 @@ func (a *App) buildTraefikConfiguration(src []internal.RouterRepresentation) dyn
 			LoadBalancer: &dynamic.ServersLoadBalancer{
 				PassHostHeader: &a.Config.Generator.PassHostHeader,
 				Servers:        servers,
+				HealthCheck:    a.Config.Generator.HealthCheck,
 			},
 		}
 	}

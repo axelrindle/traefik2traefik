@@ -28,11 +28,12 @@ type TraefikConfig struct {
 }
 
 type GeneratorConfig struct {
-	Entrypoints    []string                 `key:"entrypoints" validate:"required"`
-	TargetServers  []string                 `key:"targets" validate:"required"`
-	Middlewares    []string                 `key:"middlewares"`
-	PassHostHeader bool                     `key:"passHostHeader" validate:"boolean" default:"false"`
-	TLS            *dynamic.RouterTLSConfig `key:"tls,omitempty"`
+	Entrypoints    []string                   `key:"entrypoints" validate:"required"`
+	TargetServers  []string                   `key:"targets" validate:"required"`
+	Middlewares    []string                   `key:"middlewares"`
+	PassHostHeader bool                       `key:"passHostHeader" validate:"boolean" default:"false"`
+	TLS            *dynamic.RouterTLSConfig   `key:"tls,omitempty"`
+	HealthCheck    *dynamic.ServerHealthCheck `json:"healthCheck,omitempty"`
 }
 
 type Config struct {
