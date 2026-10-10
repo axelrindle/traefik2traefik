@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multiple rule filters
 - The Traefik endpoint host name is resolved to the first address that answers an ICMP echo. Addresses that do not answer are skipped.
 - Option `traefik.insecureSkipVerify` skips validation of the endpoint's TLS certificate (default `false`)
+- Option `generator.healthCheck` for configuring [Traefik health checks](https://doc.traefik.io/traefik/reference/routing-configuration/http/load-balancing/service/#health-check).
 
 ### Changed
 
