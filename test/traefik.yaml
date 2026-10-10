@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://www.schemastore.org/traefik-v3.json
+
+providers:
+  http:
+    endpoint: http://config:1234/traefik
+  file:
+    directory: /mnt/providers
+
+entryPoints:
+  dashboard:
+    address: ":2080"
+  web:
+    address: ":1337"
+  websecure:
+    address: ":1338"
+
+api:
+  dashboard: true
+  insecure: true
+
+log:
+  level: DEBUG
+
+accessLog:
+  format: json

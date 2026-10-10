@@ -1,0 +1,36 @@
+services:
+  config:
+    build:
+      context: ..
+      no_cache: true
+    volumes:
+      - ../config.yml:/mnt/traefik2traefik.yml:ro
+    command:
+      - -config
+      - /mnt/traefik2traefik.yml
+    healthcheck:
+      test:
+        - CMD
+        - /traefik2traefik
+        - -config
+        - /mnt/traefik2traefik.yml
+        - -healthcheck
+      start_period: 1s
+      interval: 15s
+      retries: 3
+
+  traefik:
+    image: traefik:v3.5.0
+    depends_on:
+      config:
+        condition: service_healthy
+        required: true
+        restart: false
+    volumes:
+      - ./traefik.yaml:/etc/traefik/config.yaml:ro
+      - ./provider.yaml:/mnt/providers/static.yaml:ro
+    ports:
+      - 2080:2080/tcp
+    command:
+      - -configFile
+      - /etc/traefik/config.yaml
