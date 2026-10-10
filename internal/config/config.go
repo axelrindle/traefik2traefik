@@ -1,6 +1,10 @@
 package config
 
-import "github.com/traefik/traefik/v3/pkg/config/dynamic"
+import (
+	"time"
+
+	"github.com/traefik/traefik/v3/pkg/config/dynamic"
+)
 
 type LoggingConfig struct {
 	Level string `key:"level" default:"info" validate:"oneof=debug info warn error"`
@@ -19,7 +23,7 @@ type TraefikConfig struct {
 	Endpoint           string         `key:"endpoint" validate:"required,http_url"`
 	BasicAuth          string         `key:"basicAuth"`
 	RuleFilter         []FilterConfig `key:"ruleFilter" validate:"dive"`
-	Timeout            int64          `key:"timeout" default:"5"`
+	Timeout            time.Duration  `key:"timeout" default:"5s"`
 	InsecureSkipVerify bool           `key:"insecureSkipVerify" default:"false"`
 }
 
@@ -37,6 +41,6 @@ type Config struct {
 	Traefik   TraefikConfig   `default:""`
 	Generator GeneratorConfig `default:""`
 
-	Environment     string `key:"env" default:"production" validate:"oneof=production development"`
-	RefreshInterval int64  `key:"refresh" default:"30"`
+	Environment     string        `key:"env" default:"production" validate:"oneof=production development"`
+	RefreshInterval time.Duration `key:"refresh" default:"30s"`
 }

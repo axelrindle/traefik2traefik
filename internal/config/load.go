@@ -11,7 +11,7 @@ import (
 func init() {
 	config.AddDriver(yaml.Driver)
 
-	config.WithOptions(config.ParseEnv, config.ParseDefault)
+	config.WithOptions(config.ParseEnv, config.ParseDefault, config.ParseTime)
 
 	config.WithOptions(func(opt *config.Options) {
 		opt.DecoderConfig.TagName = "key"

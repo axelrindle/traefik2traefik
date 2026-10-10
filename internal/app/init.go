@@ -56,11 +56,11 @@ func (a *App) initScheduler() {
 		gocron.NewTask(a.sync),
 	)
 	a.scheduler.NewJob(
-		gocron.DurationJob(time.Second*time.Duration(a.Config.RefreshInterval)),
+		gocron.DurationJob(a.Config.RefreshInterval),
 		gocron.NewTask(a.sync),
 	)
 	a.scheduler.Start()
-	a.Logger.Info("scheduler started", zap.Int64("interval", a.Config.RefreshInterval))
+	a.Logger.Info("scheduler started", zap.Duration("interval", a.Config.RefreshInterval))
 }
 
 func (a *App) initHttpServer() {

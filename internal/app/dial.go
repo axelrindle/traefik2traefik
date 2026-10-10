@@ -22,7 +22,7 @@ func (a *App) newHTTPClient() *http.Client {
 	}
 
 	return &http.Client{
-		Timeout:   time.Duration(a.Config.Traefik.Timeout) * time.Second,
+		Timeout:   a.Config.Traefik.Timeout,
 		Transport: transport,
 	}
 }
