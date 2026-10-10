@@ -100,8 +100,9 @@ jobs:
           name: binary-${{ matrix.arch }}
           path: dist/
 
-      - name: List files
-        run: tree
+      - name: Make binary executable
+        shell: bash
+        run: chmod +x dist/*
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
