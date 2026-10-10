@@ -49,9 +49,7 @@ jobs:
           restore-keys: ${{ runner.os }}-go-
 
       - name: Lint
-        uses: dominikh/staticcheck-action@v1.4.1
-        with:
-          install-go: false
+        run: go tool staticcheck -f stylish ./...
 
       - name: Run tests
         run: task test
